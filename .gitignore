@@ -18,9 +18,6 @@ AppData/
 Local/
 Docker/
 
-# application.properties dosyasını takip etme
-src/main/resources/application.properties
-
 ### IntelliJ IDEA ###
 .idea
 *.iws
