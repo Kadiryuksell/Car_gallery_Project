@@ -2,7 +2,6 @@ package com.kadirkaganyuksel.service;
 
 import com.kadirkaganyuksel.dto.account.DtoAccount;
 import com.kadirkaganyuksel.dto.account.DtoAccountIU;
-import com.kadirkaganyuksel.dto.address.DtoAddressIU;
 
 public interface IAccountService {
 

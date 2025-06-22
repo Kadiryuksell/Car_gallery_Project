@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.kadirkaganyuksel.dto.account.DtoAccount;
 import com.kadirkaganyuksel.dto.account.DtoAccountIU;
-import com.kadirkaganyuksel.dto.address.DtoAddressIU;
 import com.kadirkaganyuksel.model.Account;
 import com.kadirkaganyuksel.repository.AccountRepository;
 import com.kadirkaganyuksel.service.IAccountService;

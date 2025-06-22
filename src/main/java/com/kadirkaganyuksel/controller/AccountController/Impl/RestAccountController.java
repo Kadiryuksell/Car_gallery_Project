@@ -15,7 +15,6 @@ import com.kadirkaganyuksel.controller.AccountController.IRestAccountController;
 import com.kadirkaganyuksel.controller.Impl.RestBaseController;
 import com.kadirkaganyuksel.dto.account.DtoAccount;
 import com.kadirkaganyuksel.dto.account.DtoAccountIU;
-import com.kadirkaganyuksel.dto.address.DtoAddressIU;
 import com.kadirkaganyuksel.service.IAccountService;
 
 import jakarta.validation.Valid;
