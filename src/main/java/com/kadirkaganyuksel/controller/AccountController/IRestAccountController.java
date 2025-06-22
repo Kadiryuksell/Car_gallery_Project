@@ -3,7 +3,6 @@ package com.kadirkaganyuksel.controller.AccountController;
 import com.kadirkaganyuksel.controller.RootEntity;
 import com.kadirkaganyuksel.dto.account.DtoAccount;
 import com.kadirkaganyuksel.dto.account.DtoAccountIU;
-import com.kadirkaganyuksel.dto.address.DtoAddressIU;
 
 public interface IRestAccountController {
 
