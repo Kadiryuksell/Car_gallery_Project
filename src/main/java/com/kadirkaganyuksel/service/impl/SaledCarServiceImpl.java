@@ -94,6 +94,15 @@ public class SaledCarServiceImpl implements ISaledCarService{
 		return saledCar;
 	}
 	
+	private SaledCar uptadedSaledCar(SaledCar saledCar ,DtoSaledCarIU dtoSaledCarIU) {
+		
+		saledCar.setCustomer(customerRepository.findById(dtoSaledCarIU.getCustomerID()).orElse(null));
+		saledCar.setGallerist(galleristRepository.findById(dtoSaledCarIU.getGalleristID()).orElse(null));
+		saledCar.setCar(carRepository.findById(dtoSaledCarIU.getCarID()).orElse(null));
+		
+		return saledCar;
+	}
+	
 	
 	private boolean checkCarStatus(Long carId) {
 		Optional<Car> optional = carRepository.findById(carId);
@@ -105,7 +114,7 @@ public class SaledCarServiceImpl implements ISaledCarService{
 		return true;
 	}
 	
-	private BigDecimal remaningCustomerAmount(Customer customer, Car car) {
+	private BigDecimal remainingCustomerAmount(Customer customer, Car car) {
 		BigDecimal customerUSDAmount = converCustomerAmountToUSD(customer);
 		BigDecimal remaningCustomerUSDAmount = customerUSDAmount.subtract(car.getPrice());
 		
@@ -115,6 +124,17 @@ public class SaledCarServiceImpl implements ISaledCarService{
 		return remaningCustomerUSDAmount.multiply(usd);
 	}
 	
+	private BigDecimal getCustomerBalanceBeforeSale(Customer customer, Car car){
+		CurrencyRatesResponse currencyRatesResponse = currencyRatesService.getCurrencyRates(DateUtils.getCurrentDate(new Date()), DateUtils.getCurrentDate(new Date()));
+		
+		BigDecimal usdToTryRate = new BigDecimal(currencyRatesResponse.getItems().get(0).getUsd());
+		
+		BigDecimal customerUSD = converCustomerAmountToUSD(customer);
+
+		BigDecimal updateCustomerUSD = customerUSD.add(car.getPrice());
+		
+		return updateCustomerUSD.multiply(usdToTryRate).setScale(2,RoundingMode.HALF_UP);
+	}
 	
 	@Override
 	public DtoSaledCar buyCar(DtoSaledCarIU dtoSaledCarIU) {
@@ -135,7 +155,7 @@ public class SaledCarServiceImpl implements ISaledCarService{
 		carRepository.save(car);
 		
 		Customer customer = savedSaledCar.getCustomer();
-		customer.getAccount().setAmount(remaningCustomerAmount(customer, car));
+		customer.getAccount().setAmount(remainingCustomerAmount(customer, car));
 		customerRepository.save(customer);
 		
 		return toDTO(savedSaledCar);
@@ -169,6 +189,104 @@ public class SaledCarServiceImpl implements ISaledCarService{
 		
 		return dtoSaledCar;
 		
+	}
+
+	private SaledCar findSaledCar(Long id) {
+		
+		Optional<SaledCar> optional = saledCarRepository.findById(id);
+	
+		if(optional.isEmpty()) {
+			throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+		}
+		
+		return optional.get();
+	}
+	
+	private Customer findCustomer(Long id) {
+		Optional<Customer> optCustomer = customerRepository.findById(id);
+		
+		if(optCustomer.isEmpty()) {
+			throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+		}
+		
+		return optCustomer.get();
+		
+	}
+	
+	private Car findCar(Long id) {
+		Optional<Car> optCar = carRepository.findById(id);
+		
+		if(optCar.isEmpty()) {
+			throw new BaseException(new ErrorMessage(MessageType.NO_RECORD_EXIST, id.toString()));
+		}
+		
+		return optCar.get();
+	}
+	
+	@Override
+	public Boolean deleteSaledCar(Long id) {
+		SaledCar saledCar = findSaledCar(id);
+		
+		Optional<Car> optCar = carRepository.findById(saledCar.getCar().getId());
+		Car car = optCar.get();
+		car.setCarStatusType(CarStatusType.SALABLE);
+		carRepository.save(car);
+		saledCarRepository.delete(saledCar);
+		return true;
+	}
+
+
+	@Override
+	public DtoSaledCar findBySaledCarId(Long id) {
+		
+		SaledCar saledCar = findSaledCar(id);
+		DtoSaledCar dtoSaledCar = toDTO(saledCar);
+		
+		return dtoSaledCar;
+	}
+
+
+	@Override
+	public DtoSaledCar updateSaledCar(Long id,DtoSaledCarIU dtoSaledCarIU) {
+		
+		try {
+			SaledCar saledCar = findSaledCar(id);
+			
+			if(!checkCarStatus(saledCar.getCar().getId()) && checkCarStatus(dtoSaledCarIU.getCarID())) {
+				
+				Car car = findCar(saledCar.getCar().getId());
+				car.setCarStatusType(CarStatusType.SALABLE);
+				carRepository.save(car);
+				
+				Customer customer = findCustomer(saledCar.getCustomer().getId());
+				BigDecimal customerBalanceBeforeSale = getCustomerBalanceBeforeSale(customer, car);
+				customer.getAccount().setAmount(customerBalanceBeforeSale);
+				customerRepository.save(customer);
+				
+				
+				if(!checkAmount(dtoSaledCarIU)) {
+					throw new BaseException(new ErrorMessage(MessageType.CUSTOMER_AMOUNT_IS_NOT_ENOUGH,""));
+				}
+				
+				SaledCar savedSaledCar = saledCarRepository.save(uptadedSaledCar(saledCar,dtoSaledCarIU));
+				
+				Car updateCar = savedSaledCar.getCar();
+				updateCar.setCarStatusType(CarStatusType.SALED);
+				carRepository.save(updateCar);
+				
+				Customer updateCustomer = savedSaledCar.getCustomer();
+				updateCustomer.getAccount().setAmount(remainingCustomerAmount(updateCustomer, updateCar));
+				customerRepository.save(updateCustomer);
+				
+				return toDTO(savedSaledCar);
+			}
+			else {
+				throw new BaseException(new ErrorMessage(MessageType.CAR_STATUS_IS_ALREADY_SALED,dtoSaledCarIU.getCarID().toString()));
+			}
+	
+		} catch (Exception e) {
+			throw new BaseException(new ErrorMessage(MessageType.DUPLICATE_ID_KEY, e.getMessage()));
+		}
 	}
 	
 }

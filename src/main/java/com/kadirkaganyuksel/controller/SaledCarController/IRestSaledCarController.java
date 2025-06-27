@@ -8,4 +8,9 @@ public interface IRestSaledCarController {
 
 	public RootEntity<DtoSaledCar> buyCar(DtoSaledCarIU dtoSaledCarIU);
 	
+	public RootEntity<Boolean> deleteSaledCar(Long id);
+	
+	public RootEntity<DtoSaledCar> findBySaledCarId(Long id);
+	
+	public RootEntity<DtoSaledCar> updateSaledCar(Long id,DtoSaledCarIU dtoSaledCarIU);
 }
