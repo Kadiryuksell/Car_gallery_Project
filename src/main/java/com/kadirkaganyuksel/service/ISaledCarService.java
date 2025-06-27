@@ -7,4 +7,10 @@ public interface ISaledCarService {
 
 	public DtoSaledCar buyCar(DtoSaledCarIU dtoSaledCarIU);
 	
+	public Boolean deleteSaledCar(Long id);
+	
+	public DtoSaledCar findBySaledCarId(Long id);
+	
+	public DtoSaledCar updateSaledCar(Long id,DtoSaledCarIU dtoSaledCarIU);
+	
 }
