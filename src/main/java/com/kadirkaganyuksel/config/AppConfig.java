@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.kadirkaganyuksel.exception.BaseException;
 import com.kadirkaganyuksel.exception.ErrorMessage;
@@ -62,7 +63,10 @@ public class AppConfig {
 		return new BCryptPasswordEncoder();
 	}
 	
-	
+	@Bean
+	public WebClient webClient() {
+		return WebClient.builder().build();
+	}
 	
 }
 
