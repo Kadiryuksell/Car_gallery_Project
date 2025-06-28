@@ -2,6 +2,7 @@ package com.kadirkaganyuksel.service.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -51,7 +52,7 @@ public class SaledCarServiceImpl implements ISaledCarService{
 	private ICurrencyRatesService currencyRatesService;
 	
 	private BigDecimal converCustomerAmountToUSD(Customer customer) {
-		CurrencyRatesResponse currencyRatesResponse = currencyRatesService.getCurrencyRates(DateUtils.getCurrentDate(new Date()), DateUtils.getCurrentDate(new Date()));
+		CurrencyRatesResponse currencyRatesResponse = currencyRatesService.getCurrencyRates(DateUtils.getCurrentDate(LocalDate.now()), DateUtils.getCurrentDate(LocalDate.now()));
 		
 	    BigDecimal usd = new BigDecimal(currencyRatesResponse.getItems().get(0).getUsd());
 		
@@ -118,14 +119,14 @@ public class SaledCarServiceImpl implements ISaledCarService{
 		BigDecimal customerUSDAmount = converCustomerAmountToUSD(customer);
 		BigDecimal remaningCustomerUSDAmount = customerUSDAmount.subtract(car.getPrice());
 		
-		CurrencyRatesResponse currencyRatesResponse = currencyRatesService.getCurrencyRates(DateUtils.getCurrentDate(new Date()), DateUtils.getCurrentDate(new Date()));
+		CurrencyRatesResponse currencyRatesResponse = currencyRatesService.getCurrencyRates(DateUtils.getCurrentDate(LocalDate.now()),DateUtils.getCurrentDate(LocalDate.now()));
 		BigDecimal usd = new BigDecimal(currencyRatesResponse.getItems().get(0).getUsd());
 		
 		return remaningCustomerUSDAmount.multiply(usd);
 	}
 	
 	private BigDecimal getCustomerBalanceBeforeSale(Customer customer, Car car){
-		CurrencyRatesResponse currencyRatesResponse = currencyRatesService.getCurrencyRates(DateUtils.getCurrentDate(new Date()), DateUtils.getCurrentDate(new Date()));
+		CurrencyRatesResponse currencyRatesResponse = currencyRatesService.getCurrencyRates(DateUtils.getCurrentDate(LocalDate.now()),DateUtils.getCurrentDate(LocalDate.now()));
 		
 		BigDecimal usdToTryRate = new BigDecimal(currencyRatesResponse.getItems().get(0).getUsd());
 		

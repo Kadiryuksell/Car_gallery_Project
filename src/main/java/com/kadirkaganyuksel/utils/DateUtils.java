@@ -1,12 +1,12 @@
 package com.kadirkaganyuksel.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class DateUtils {
 
-	public static String getCurrentDate(Date date) {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		return simpleDateFormat.format(date);
+	public static String getCurrentDate(LocalDate date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		return date.format(formatter);
 	}
 }
