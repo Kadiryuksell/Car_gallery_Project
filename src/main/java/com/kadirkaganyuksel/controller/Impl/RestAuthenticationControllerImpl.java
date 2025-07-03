@@ -1,6 +1,5 @@
 package com.kadirkaganyuksel.controller.Impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,8 +17,11 @@ import jakarta.validation.Valid;
 @RestController
 public class RestAuthenticationControllerImpl extends RestBaseController implements IRestAuthenticationController{
 
-	@Autowired
-	private IAuthenticationService authenticationService;
+	private final IAuthenticationService authenticationService;
+	
+	public RestAuthenticationControllerImpl(IAuthenticationService authenticationService) {
+		this.authenticationService = authenticationService;
+	}
 	
 	
 	@PostMapping("/register")

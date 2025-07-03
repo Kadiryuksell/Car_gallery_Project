@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kadirkaganyuksel.dto.address.DtoAddress;
@@ -22,11 +21,13 @@ import com.kadirkaganyuksel.service.IGalleristService;
 @Service
 public class GalleristServiceImpl implements IGalleristService{
 
-	@Autowired
-	private AddressRepository addressRepository;
+	private final AddressRepository addressRepository;	
+	private final GalleristRepository galleristRepository;
 	
-	@Autowired
-	private GalleristRepository galleristRepository;
+	public GalleristServiceImpl(AddressRepository addressRepository, GalleristRepository galleristRepository) {
+		this.addressRepository = addressRepository;
+		this.galleristRepository = galleristRepository;
+	}
 	
 	private Gallerist createGallerist(DtoGalleristIU dtoGalleristIU) {
 		

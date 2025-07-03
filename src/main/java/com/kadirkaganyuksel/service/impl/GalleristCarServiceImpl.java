@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kadirkaganyuksel.dto.address.DtoAddress;
@@ -26,14 +25,16 @@ import com.kadirkaganyuksel.service.IGalleristCarService;
 @Service
 public class GalleristCarServiceImpl implements IGalleristCarService{
 
-	@Autowired
-	private GalleristRepository galleristRepository;
+
+	private final GalleristRepository galleristRepository;
+	private final CarRepository carRepository;
+	private final GalleristCarRepository galleristCarRepository;
 	
-	@Autowired
-	private CarRepository carRepository;
-	
-	@Autowired
-	private GalleristCarRepository galleristCarRepository;
+	public GalleristCarServiceImpl(GalleristRepository galleristRepository, CarRepository carRepository, GalleristCarRepository galleristCarRepository) {
+		this.carRepository = carRepository;
+		this.galleristCarRepository = galleristCarRepository;
+		this.galleristRepository = galleristRepository;
+	}
 	
 	private GalleristCar createGalleristCar(DtoGalleristCarIU dtoGalleristCarIU) {
 		

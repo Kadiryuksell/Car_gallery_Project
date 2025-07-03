@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kadirkaganyuksel.dto.account.DtoAccount;
@@ -25,14 +24,15 @@ import com.kadirkaganyuksel.service.ICustomerService;
 @Service
 public class CustomerServiceImpl implements ICustomerService{
 
-	@Autowired
-	private AddressRepository addressRepository;
+	private final AddressRepository addressRepository;
+	private final AccountRepository accountRepository;
+	private final CustomerRepository customerRepository;
 	
-	@Autowired
-	private AccountRepository accountRepository;
-	
-	@Autowired
-	private CustomerRepository customerRepository;
+	public CustomerServiceImpl(AddressRepository addressRepository,AccountRepository accountRepository,CustomerRepository customerRepository) {
+		this.accountRepository = accountRepository;
+		this.addressRepository = addressRepository;
+		this.customerRepository = customerRepository;
+	}
 	
 	private Customer createCustomer(DtoCustomerIU dtoCustomerIU) {
 

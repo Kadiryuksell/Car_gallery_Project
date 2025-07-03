@@ -1,6 +1,5 @@
 package com.kadirkaganyuksel.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -25,20 +24,41 @@ public class SecurityConfig {
 			"/v3/api-docs/**",
 			"/swagger-ui.html"
 	};
+
+	private final AuthenticationProvider authenticationProvider;
+	private final JWTAuthenticationFilter jwtAuthenticationFilter;
+	private final AuthEntryPoint authEntryPoint;
 	
-	
-	@Autowired
-	private AuthenticationProvider authenticationProvider;
-	
-	@Autowired
-	private JWTAuthenticationFilter jwtAuthenticationFilter;
-	
-	@Autowired
-	private AuthEntryPoint authEntryPoint;
+	public SecurityConfig(AuthenticationProvider authenticationProvider,JWTAuthenticationFilter jwtAuthenticationFilter,AuthEntryPoint authEntryPoint) {
+		this.authenticationProvider = authenticationProvider;
+		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+		this.authEntryPoint = authEntryPoint;
+	}
 	
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable()
+	protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		
+		http
+	    .csrf(csrf -> csrf.disable()) 
+	    .authorizeHttpRequests(request -> request
+	        .requestMatchers(REGISTER, AUTHENTICATE, REFRESH_TOKEN).permitAll()
+	        .requestMatchers(SWAGGER_PATHS).permitAll()
+	        .anyRequest().authenticated()
+	    )
+	    .exceptionHandling(exception -> exception
+	        .authenticationEntryPoint(authEntryPoint)
+	    )
+	    .sessionManagement(session -> session
+	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	    )
+	    .authenticationProvider(authenticationProvider)
+	    .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+	return http.build();
+
+		
+		
+	/*	http.csrf().disable()
 		.authorizeHttpRequests(request -> request.requestMatchers(REGISTER,AUTHENTICATE,REFRESH_TOKEN)
 				.permitAll()
 				.requestMatchers(SWAGGER_PATHS).permitAll()
@@ -49,7 +69,7 @@ public class SecurityConfig {
 		.authenticationProvider(authenticationProvider)
 		.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	
-		return http.build();
+		return http.build(); */
 	}
 	
 }

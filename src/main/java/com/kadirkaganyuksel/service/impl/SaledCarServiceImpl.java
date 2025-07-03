@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kadirkaganyuksel.dto.account.DtoAccount;
@@ -36,20 +35,19 @@ import com.kadirkaganyuksel.utils.DateUtils;
 @Service
 public class SaledCarServiceImpl implements ISaledCarService{
 
-	@Autowired
-	private SaledCarRepository saledCarRepository;
+	private final SaledCarRepository saledCarRepository;
+	private final CustomerRepository customerRepository;
+	private final GalleristRepository galleristRepository;
+	private final CarRepository carRepository;
+	private final ICurrencyRatesService currencyRatesService;
 	
-	@Autowired
-	private CustomerRepository customerRepository;
-	
-	@Autowired
-	private GalleristRepository galleristRepository;
-	
-	@Autowired
-	private CarRepository carRepository;
-	
-	@Autowired
-	private ICurrencyRatesService currencyRatesService;
+	public SaledCarServiceImpl(SaledCarRepository saledCarRepository,CustomerRepository customerRepository, GalleristRepository galleristRepository,CarRepository carRepository,ICurrencyRatesService currencyRatesService) {
+		this.saledCarRepository = saledCarRepository;
+		this.customerRepository = customerRepository;
+		this.galleristRepository = galleristRepository;
+		this.carRepository = carRepository;
+		this.currencyRatesService = currencyRatesService;
+	}
 	
 	private BigDecimal converCustomerAmountToUSD(Customer customer) {
 		CurrencyRatesResponse currencyRatesResponse = currencyRatesService.getCurrencyRates(DateUtils.getCurrentDate(LocalDate.now()), DateUtils.getCurrentDate(LocalDate.now()));

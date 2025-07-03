@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kadirkaganyuksel.dto.account.DtoAccount;
@@ -17,8 +16,11 @@ import com.kadirkaganyuksel.service.IAccountService;
 @Service
 public class AccountServiceImpl implements IAccountService{
 
-	@Autowired
-	private AccountRepository accountRepository;
+	private final AccountRepository accountRepository;
+
+	public AccountServiceImpl(AccountRepository accountRepository) {
+		this.accountRepository = accountRepository;
+	}
 	
 	private Account createAccount(DtoAccountIU dtoAccountIU) {
 		

@@ -1,6 +1,5 @@
 package com.kadirkaganyuksel.controller.CarController.Impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +22,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/rest/api/car")
 public class RestCarController extends RestBaseController implements IRestCarController{
 
-	@Autowired
-	private ICarService carService;
+	
+	private final ICarService carService;
+	
+	public RestCarController(ICarService carService) {
+		this.carService = carService;
+	}
 	
 	@PostMapping("/save")
 	@Override
@@ -35,21 +38,21 @@ public class RestCarController extends RestBaseController implements IRestCarCon
 
 	@DeleteMapping("/delete/{id}")
 	@Override
-	public RootEntity<Boolean> deleteCar(@PathVariable(name = "id") Long id) {
+	public RootEntity<Boolean> deleteCar(@PathVariable Long id) {
 		
 		return ok(carService.deleteCar(id));
 	}
 
 	@GetMapping("/list/{id}")
 	@Override
-	public RootEntity<DtoCar> getByCarId(@PathVariable(name = "id") Long id) {
+	public RootEntity<DtoCar> getByCarId(@PathVariable Long id) {
 		
 		return ok(carService.getByCarId(id));
 	}
 
 	@PutMapping("/update/{id}")
 	@Override
-	public RootEntity<DtoCar> updateCar(@PathVariable(name = "id") Long id,@Valid @RequestBody DtoCarIU dtoCarIU) {
+	public RootEntity<DtoCar> updateCar(@PathVariable Long id,@Valid @RequestBody DtoCarIU dtoCarIU) {
 		
 		return ok(carService.updateCar(id, dtoCarIU));
 	}

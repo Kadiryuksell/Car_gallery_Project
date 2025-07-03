@@ -1,6 +1,5 @@
 package com.kadirkaganyuksel.controller.CustomerController.Impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +22,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/rest/api/customer")
 public class RestCustomerController extends RestBaseController implements IRestCustomerController{
 
-	@Autowired
-	private ICustomerService customerService;
+	
+	private final ICustomerService customerService;
+	
+	public RestCustomerController(ICustomerService customerService) {
+		this.customerService = customerService;
+	}
 	
 	@PostMapping(path = "/save")	
 	@Override
@@ -35,21 +38,21 @@ public class RestCustomerController extends RestBaseController implements IRestC
 
 	@DeleteMapping("delete/{id}")
 	@Override
-	public RootEntity<Boolean> deleteCustomer(@PathVariable(name = "id") long id) {
+	public RootEntity<Boolean> deleteCustomer(@PathVariable long id) {
 		
 		return ok(customerService.deleteCustomer(id));
 	}
 
 	@GetMapping(path = "/list/{id}")
 	@Override
-	public RootEntity<DtoCustomer> getCustomerById(@PathVariable(name = "id") Long id) {
+	public RootEntity<DtoCustomer> getCustomerById(@PathVariable Long id) {
 		
 		return ok(customerService.getCustomerById(id));
 	}
 
 	@PutMapping(path = "/update/{id}")
 	@Override
-	public RootEntity<DtoCustomer> UpdateCustomer(@PathVariable(name = "id") Long id,@Valid @RequestBody DtoCustomerIU dtoCustomerIU) {
+	public RootEntity<DtoCustomer> UpdateCustomer(@PathVariable Long id,@Valid @RequestBody DtoCustomerIU dtoCustomerIU) {
 
 		return ok(customerService.UpdateCustomer(id, dtoCustomerIU));
 	}

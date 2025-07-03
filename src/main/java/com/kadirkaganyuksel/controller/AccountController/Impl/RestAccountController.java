@@ -1,6 +1,5 @@
 package com.kadirkaganyuksel.controller.AccountController.Impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +22,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/rest/api/account")
 public class RestAccountController extends RestBaseController  implements IRestAccountController {
 
-	@Autowired
-	private IAccountService accountService;
+	
+	private final IAccountService accountService;
+	
+	public RestAccountController(IAccountService accountService) {
+		this.accountService = accountService;
+	}
 	
 	@PostMapping("/save")
 	@Override
@@ -34,20 +37,20 @@ public class RestAccountController extends RestBaseController  implements IRestA
 
 	@DeleteMapping(path = "/delete/{id}")
 	@Override
-	public void deleteAccount(@PathVariable(name = "id") long id) {
+	public void deleteAccount(@PathVariable long id) {
 		accountService.deleteAccount(id);
 		
 	}
 
 	@GetMapping(path = "/{id}")
 	@Override
-	public RootEntity<DtoAccount> getByAccountId(@PathVariable(name = "id") Long id) {
+	public RootEntity<DtoAccount> getByAccountId(@PathVariable Long id) {
 		return ok(accountService.getByAccountId(id));
 	}
 
 	@PutMapping(path = "/update/{id}")
 	@Override
-	public RootEntity<DtoAccount> updateAccount(@PathVariable(name = "id") long id,@Valid  @RequestBody DtoAccountIU dtoAccountIU) {
+	public RootEntity<DtoAccount> updateAccount(@PathVariable long id,@Valid  @RequestBody DtoAccountIU dtoAccountIU) {
 		
 		return ok(accountService.updateAccount(id, dtoAccountIU));
 	}

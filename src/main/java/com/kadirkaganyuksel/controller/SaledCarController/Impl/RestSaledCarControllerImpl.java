@@ -1,6 +1,5 @@
 package com.kadirkaganyuksel.controller.SaledCarController.Impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,9 +22,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/rest/api/saled-car")
 public class RestSaledCarControllerImpl extends RestBaseController implements IRestSaledCarController{
 
-	@Autowired
+	
 	private ISaledCarService saledCarService;
 	
+	public RestSaledCarControllerImpl(ISaledCarService saledCarService) {
+		this.saledCarService = saledCarService;
+	}
 	
 	@PostMapping("/save")
 	@Override
@@ -37,7 +39,7 @@ public class RestSaledCarControllerImpl extends RestBaseController implements IR
 
 	@DeleteMapping("/delete/{id}")
 	@Override
-	public RootEntity<Boolean> deleteSaledCar(@PathVariable(name = "id") Long id) {
+	public RootEntity<Boolean> deleteSaledCar(@PathVariable Long id) {
 		
 		return ok(saledCarService.deleteSaledCar(id));
 	}
@@ -45,7 +47,7 @@ public class RestSaledCarControllerImpl extends RestBaseController implements IR
 
 	@GetMapping("/list/{id}")
 	@Override
-	public RootEntity<DtoSaledCar> findBySaledCarId(@PathVariable(name = "id") Long id) {
+	public RootEntity<DtoSaledCar> findBySaledCarId(@PathVariable Long id) {
 		
 		return ok(saledCarService.findBySaledCarId(id));
 	}
@@ -53,7 +55,7 @@ public class RestSaledCarControllerImpl extends RestBaseController implements IR
 
 	@PutMapping("/update/{id}")
 	@Override
-	public RootEntity<DtoSaledCar> updateSaledCar(@PathVariable(name = "id") Long id,@Valid @RequestBody DtoSaledCarIU dtoSaledCarIU) {
+	public RootEntity<DtoSaledCar> updateSaledCar(@PathVariable Long id,@Valid @RequestBody DtoSaledCarIU dtoSaledCarIU) {
 		
 		return ok(saledCarService.updateSaledCar(id, dtoSaledCarIU));
 	}

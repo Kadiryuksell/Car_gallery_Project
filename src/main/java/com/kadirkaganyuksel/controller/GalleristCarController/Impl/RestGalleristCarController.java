@@ -1,6 +1,5 @@
 package com.kadirkaganyuksel.controller.GalleristCarController.Impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +22,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/rest/api/gallerist-car")
 public class RestGalleristCarController extends RestBaseController implements IRestGalleristCarController{
 
-	@Autowired
-	private IGalleristCarService galleristCarService;
+	
+	private final IGalleristCarService galleristCarService;
+	
+	public RestGalleristCarController(IGalleristCarService galleristCarService) {
+		this.galleristCarService = galleristCarService;
+	}
 	
 	@PostMapping("/save")
 	@Override
@@ -35,21 +38,21 @@ public class RestGalleristCarController extends RestBaseController implements IR
 
 	@DeleteMapping("/delete/{id}")
 	@Override
-	public RootEntity<Boolean> deleteGalleristCar(@PathVariable(name = "id") Long id) {
+	public RootEntity<Boolean> deleteGalleristCar(@PathVariable Long id) {
 		
 		return ok(galleristCarService.deleteGalleristCar(id));
 	}
 
 	@GetMapping("/list/{id}")
 	@Override
-	public RootEntity<DtoGalleristCar> getByGalleristCarId(@PathVariable(name = "id") Long id) {
+	public RootEntity<DtoGalleristCar> getByGalleristCarId(@PathVariable Long id) {
 		
 		return ok(galleristCarService.getByGalleristCarId(id));
 	}
 
 	@PutMapping("/update/{id}")
 	@Override
-	public RootEntity<DtoGalleristCar> updateGalleristCar(@PathVariable(name = "id") Long id,@Valid @RequestBody DtoGalleristCarIU dtoGalleristCarIU) {
+	public RootEntity<DtoGalleristCar> updateGalleristCar(@PathVariable Long id,@Valid @RequestBody DtoGalleristCarIU dtoGalleristCarIU) {
 		
 		return ok(galleristCarService.updateGalleristCar(id, dtoGalleristCarIU));
 	}

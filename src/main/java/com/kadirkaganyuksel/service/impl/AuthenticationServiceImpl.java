@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,20 +27,21 @@ import com.kadirkaganyuksel.service.IAuthenticationService;
 @Service
 public class AuthenticationServiceImpl implements IAuthenticationService{
 
-	@Autowired
-	private UserRepository userRepository;
 	
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+	private final UserRepository userRepository;
+	private final BCryptPasswordEncoder encoder;
+	private final AuthenticationProvider authenticationProvider;
+	private final JWTService jwtService;	
+	private final RefreshTokenRepository refreshTokenRepository;
 	
-	@Autowired
-	private AuthenticationProvider authenticationProvider;
-	
-	@Autowired
-	private JWTService jwtService;
-	
-	@Autowired
-	private RefreshTokenRepository refreshTokenRepository;
+
+	public AuthenticationServiceImpl(UserRepository userRepository,BCryptPasswordEncoder encoder, AuthenticationProvider authenticationProvider,JWTService jwtService,RefreshTokenRepository refreshTokenRepository) {
+		this.authenticationProvider = authenticationProvider;
+		this.encoder = encoder;
+		this.userRepository = userRepository;
+		this.jwtService = jwtService;
+		this.refreshTokenRepository = refreshTokenRepository;
+	}
 	
 	private User createUser(AuthRequest input) {
 		User user = new User();
