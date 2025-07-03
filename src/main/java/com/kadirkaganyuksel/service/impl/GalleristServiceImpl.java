@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kadirkaganyuksel.dto.address.DtoAddress;
 import com.kadirkaganyuksel.dto.gallerist.DtoGallerist;
@@ -78,6 +79,7 @@ public class GalleristServiceImpl implements IGalleristService{
 		return false;
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public DtoGallerist getByGalleristId(Long id) {
 	

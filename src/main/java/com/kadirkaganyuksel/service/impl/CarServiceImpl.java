@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kadirkaganyuksel.dto.car.DtoCar;
 import com.kadirkaganyuksel.dto.car.DtoCarIU;
@@ -54,6 +55,7 @@ public class CarServiceImpl implements ICarService{
 		return true;
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public DtoCar getByCarId(Long id) {
 		DtoCar dtoCar = new DtoCar();

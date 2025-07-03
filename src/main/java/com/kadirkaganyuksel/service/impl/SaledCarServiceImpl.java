@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kadirkaganyuksel.dto.account.DtoAccount;
 import com.kadirkaganyuksel.dto.address.DtoAddress;
@@ -234,7 +235,7 @@ public class SaledCarServiceImpl implements ISaledCarService{
 		return true;
 	}
 
-
+	@Transactional(readOnly = true)
 	@Override
 	public DtoSaledCar findBySaledCarId(Long id) {
 		

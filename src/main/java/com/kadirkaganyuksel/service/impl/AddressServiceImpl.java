@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kadirkaganyuksel.dto.address.DtoAddress;
 import com.kadirkaganyuksel.dto.address.DtoAddressIU;
@@ -54,6 +55,7 @@ public class AddressServiceImpl implements IAddressService{
 	
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public List<DtoAddress> getAllAddress() {
 		
@@ -72,6 +74,7 @@ public class AddressServiceImpl implements IAddressService{
 		return dtoAddressList;
 	}
 	
+	@Transactional(readOnly = true)
 	@Override
 	public DtoAddress getbyAddressId(long id) {
 		

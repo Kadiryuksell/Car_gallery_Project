@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kadirkaganyuksel.dto.address.DtoAddress;
 import com.kadirkaganyuksel.dto.car.DtoCar;
@@ -92,6 +93,7 @@ public class GalleristCarServiceImpl implements IGalleristCarService{
 		return true;
 	}
 
+	@Transactional(readOnly = true)
 	@Override
 	public DtoGalleristCar getByGalleristCarId(Long id) {
 		

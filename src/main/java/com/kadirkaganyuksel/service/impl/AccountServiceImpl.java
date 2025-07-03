@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kadirkaganyuksel.dto.account.DtoAccount;
 import com.kadirkaganyuksel.dto.account.DtoAccountIU;
@@ -54,7 +55,7 @@ public class AccountServiceImpl implements IAccountService{
 			accountRepository.delete(deleteAccount.get());
 		}
 	}
-	
+
 	private Account findAccount(long id) {
 		
 		Optional<Account> optional = accountRepository.findById(id);
@@ -66,7 +67,7 @@ public class AccountServiceImpl implements IAccountService{
 		return optional.get();	
 	}
 	
-
+	@Transactional(readOnly = true)
 	@Override
 	public DtoAccount getByAccountId(Long id) {
 		
