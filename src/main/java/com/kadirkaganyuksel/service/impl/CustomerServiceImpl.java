@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kadirkaganyuksel.dto.account.DtoAccount;
 import com.kadirkaganyuksel.dto.address.DtoAddress;
@@ -58,6 +59,7 @@ public class CustomerServiceImpl implements ICustomerService{
 		return customer;
 	}
 	
+
 	private DtoAddress isAddress(DtoCustomerIU dtoCustomerIU) {
 		DtoAddress dtoAddress = new DtoAddress();
 		
@@ -135,7 +137,7 @@ public class CustomerServiceImpl implements ICustomerService{
 		return dtoAccount;
 	}
 	
-	
+	@Transactional(readOnly = true)
 	@Override
 	public DtoCustomer getCustomerById(Long id) {
 		DtoCustomer  dtoCustomer = new DtoCustomer();
