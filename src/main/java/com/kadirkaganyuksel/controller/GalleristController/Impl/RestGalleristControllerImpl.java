@@ -1,6 +1,5 @@
 package com.kadirkaganyuksel.controller.GalleristController.Impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,9 +22,13 @@ import jakarta.validation.Valid;
 @RequestMapping("/rest/api/gallerist")
 public class RestGalleristControllerImpl extends RestBaseController implements IRestGalleristController{
 
-	@Autowired
-	private IGalleristService  galleristService;
+	
+	private final IGalleristService  galleristService;
 
+	public RestGalleristControllerImpl(IGalleristService galleristService) {
+		this.galleristService = galleristService;
+	}
+	
 	@PostMapping(path = "/save")
 	@Override
 	public RootEntity<DtoGallerist> saveGallerist(@Valid @RequestBody DtoGalleristIU dtoGalleristIU) {
@@ -35,21 +38,21 @@ public class RestGalleristControllerImpl extends RestBaseController implements I
 
 	@DeleteMapping("/delete/{id}")
 	@Override
-	public RootEntity<Boolean> deleteGallerist(@PathVariable(name = "id") Long id) {
+	public RootEntity<Boolean> deleteGallerist(@PathVariable Long id) {
 		
 		return ok(galleristService.deleteGallerist(id)); 
 	}
 
 	@GetMapping("/list/{id}")
 	@Override
-	public RootEntity<DtoGallerist> getByGalleristId(@PathVariable(name = "id") Long id) {
+	public RootEntity<DtoGallerist> getByGalleristId(@PathVariable Long id) {
 		
 		return ok(galleristService.getByGalleristId(id)); 
 	}
 
 	@PutMapping("/update/{id}")
 	@Override
-	public RootEntity<DtoGallerist> updateGallerist(@PathVariable(name = "id") Long id,@Valid @RequestBody DtoGalleristIU dtoGalleristIU) {
+	public RootEntity<DtoGallerist> updateGallerist(@PathVariable Long id,@Valid @RequestBody DtoGalleristIU dtoGalleristIU) {
 		
 		return ok(galleristService.updateGallerist(id, dtoGalleristIU));
 	}

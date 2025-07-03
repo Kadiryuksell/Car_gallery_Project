@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kadirkaganyuksel.dto.car.DtoCar;
@@ -19,8 +18,12 @@ import com.kadirkaganyuksel.service.ICarService;
 @Service
 public class CarServiceImpl implements ICarService{
 
-	@Autowired
-	private CarRepository carRepository;
+	
+	private final CarRepository carRepository;
+	
+	public CarServiceImpl(CarRepository carRepository) {
+		this.carRepository = carRepository;
+	}
 	
 	private Car createCar(DtoCarIU dtoCarIU) {
 		Car car = new Car();

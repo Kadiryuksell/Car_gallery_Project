@@ -2,7 +2,6 @@ package com.kadirkaganyuksel.controller.AddressController.Impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +25,13 @@ import jakarta.validation.Valid;
 public class RestAddressControllerImpl extends RestBaseController implements IRestAddressController{
 
 
-	@Autowired
-	private IAddressService addressService;
+	
+	private final IAddressService addressService;
+	
+	public RestAddressControllerImpl(IAddressService addressService) {
+		this.addressService = addressService;
+	}
+	
 	
 	@PostMapping("/save")
 	@Override
@@ -38,7 +42,7 @@ public class RestAddressControllerImpl extends RestBaseController implements IRe
 
 	@DeleteMapping(path = "/delete/{id}")
 	@Override
-	public void deleteAddress(@PathVariable(name = "id") Long id) {
+	public void deleteAddress(@PathVariable Long id) {
 		addressService.deleteAddress(id);
 		
 	}
@@ -52,14 +56,14 @@ public class RestAddressControllerImpl extends RestBaseController implements IRe
 
 	@GetMapping(path = "/list/{id}")
 	@Override
-	public RootEntity<DtoAddress> getbyAddressId(@PathVariable(name = "id") long id) {
+	public RootEntity<DtoAddress> getbyAddressId(@PathVariable long id) {
 		
 		return ok(addressService.getbyAddressId(id)); 
 	}
 
 	@PutMapping(path = "/update/{id}")
 	@Override
-	public RootEntity<DtoAddress> updateAddress(@PathVariable(name = "id") long id, @Valid  @RequestBody DtoAddressIU dtoAddressIU) {
+	public RootEntity<DtoAddress> updateAddress(@PathVariable long id, @Valid  @RequestBody DtoAddressIU dtoAddressIU) {
 		
 		return ok(addressService.updateAddress(id, dtoAddressIU));
 	}

@@ -28,7 +28,7 @@ public class AppConfig {
 	private UserRepository userRepository;
 	
 	@Bean
-	public UserDetailsService userDetailsService() {
+	protected UserDetailsService userDetailsService() {
 		return new UserDetailsService() {
 			
 			@Override
@@ -44,7 +44,7 @@ public class AppConfig {
 	}
 	
 	@Bean
-	public AuthenticationProvider authenticationProvider() {
+	protected AuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setUserDetailsService(userDetailsService());
 		provider.setPasswordEncoder(passwordEncoder());
@@ -53,18 +53,18 @@ public class AppConfig {
 	}
 	
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+	protected AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 		return configuration.getAuthenticationManager();
 	}
 	
 	
 	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
+	protected BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 	
 	@Bean
-	public WebClient webClient() {
+	protected WebClient webClient() {
 		return WebClient.builder().build();
 	}
 	

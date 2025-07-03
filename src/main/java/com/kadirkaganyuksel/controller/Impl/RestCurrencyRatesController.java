@@ -1,6 +1,5 @@
 package com.kadirkaganyuksel.controller.Impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,8 +14,12 @@ import com.kadirkaganyuksel.service.ICurrencyRatesService;
 @RequestMapping("rest/api")
 public class RestCurrencyRatesController extends RestBaseController implements IRestCurrencyRatesController{
 
-	@Autowired
-	private ICurrencyRatesService currencyRatesService;
+	
+	private final ICurrencyRatesService currencyRatesService;
+	
+	public RestCurrencyRatesController(ICurrencyRatesService currencyRatesService) {
+		this.currencyRatesService = currencyRatesService;
+	}
 	
 	@GetMapping("/currency-rate")
 	@Override

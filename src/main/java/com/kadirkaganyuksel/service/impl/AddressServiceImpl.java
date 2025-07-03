@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kadirkaganyuksel.dto.address.DtoAddress;
@@ -18,8 +17,12 @@ import com.kadirkaganyuksel.service.IAddressService;
 @Service
 public class AddressServiceImpl implements IAddressService{
 
-	@Autowired
-	private AddressRepository addressRepository;
+
+	private final AddressRepository addressRepository;
+	
+	public AddressServiceImpl(AddressRepository addressRepository) {
+		this.addressRepository = addressRepository;
+	}
 	
 	
 	private Address createAddress(DtoAddressIU dtoAddressIU) {
